@@ -41,7 +41,7 @@ Exec=~/Desktop/dist/proxynema
 Type=Application
 Terminal=true
 StartupNotify=false
-Path=~Desktop/dist
+Path=~/Desktop/dist
 ```
 
 Также вы можете установить свою картинку иконки, скопировав ее в директорию __dist__ и добавив к содержимому файла __launcher.desktop__ путь 
