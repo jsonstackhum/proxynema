@@ -11,19 +11,27 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.common.proxy import Proxy, ProxyType
 import getprx
+import colorama
+from colorama import Fore, Back, Style
+colorama.init()
 
 
 def clear_terminal():
+    print(Fore.GREEN+Back.BLACK+''+Style.BRIGHT)
     os.system('cls' if os.name == 'nt' else 'clear')
-    tprint('        ProXynema')
-    print("""
+    tprint('      Proxynema', font="cybermedium")
+    print(Fore.YELLOW+Back.BLACK+Style.NORMAL+
+        """
+        _____________________________________________________________________
+                
         Данный скрипт ищет временные ссылки на фильмы сайта https://kinogo.la
         посредством проксирования без VPN.
         В настоящей версии программы не реализован парсинг сериалов!
         Во избежание бана вашего ip не обновляйте список proxy слишком часто.
-        кодер @jsonstackhum 
+        кодер @jsonstackhum
+        _____________________________________________________________________
 
-        """)
+        """+Fore.GREEN)
 
 
 def save_film_page(link, ses):
@@ -69,16 +77,20 @@ def get_mp4(file):
         while True:
             try:
                 clear_terminal()
-                resolution = int(input('Выберите разрешение: \n1: 240\n2: 360\n3: 480\n4: 720\n'))
+                resolution = int(input(f'{Style.BRIGHT}Выберите разрешение: {Style.NORMAL}\
+                    \n[{Style.BRIGHT}1{Style.NORMAL}] 240\
+                    \n[{Style.BRIGHT}2{Style.NORMAL}] 360\
+                    \n[{Style.BRIGHT}3{Style.NORMAL}] 480\
+                    \n[{Style.BRIGHT}4{Style.NORMAL}] 720\n'))
                 src = src.strip('240.mp4')+('240.mp4' if resolution == 1 else '360.mp4' if resolution == 2 else '480.mp4' if resolution == 3 else '720.mp4' if resolution == 4 else '240.mp4')
                 clear_terminal()
-                print('ССЫЛКА:')
-                print(src)
+                print(f'{Style.BRIGHT}ССЫЛКА:{Style.NORMAL}')
+                print(f'{Fore.CYAN}{src}')
                 try:
                     os.remove('film.html')
                 except: pass
                 break
-            except: print("Выбрано неверное разрешение")
+            except: print(Fore.RED+"Выбрано неверное разрешение"+Fore.RESET)
 
 
 def get_proxies_list()->list:
@@ -122,14 +134,14 @@ def search_film(ses, film):
                 cnt+=1
                 span = i.find('span', class_="searchheading")
                 links.append(href)
-                print(f'{cnt}: {span.text}')
+                print(f'[{Style.BRIGHT}{cnt}{Style.NORMAL}] {span.text}')
             while True:
                 try:
-                    movie_number = int(input('Введите порядковый номер фильма: '))
+                    movie_number = int(input(f'{Style.BRIGHT}Введите порядковый номер фильма: {Style.NORMAL}'))
                     link = links[movie_number-1 if movie_number >= 2 else 0]
                     break
                 except:
-                    print('Некорректная команда')
+                    print(Fore.RED+'Некорректная команда'+Fore.GREEN)
             clear_terminal()
             print('Запрос страницы фильма. Ожидайте')
             sleep(3)
@@ -145,12 +157,12 @@ def get_film_name():
     main_page = 'https://kinogo.la'
     cnt = 0
     r = None
-    film_name = input('Введите название фильма: ').lower().strip() 
+    film_name = input(f'{Style.BRIGHT}Введите название фильма: {Style.NORMAL}').lower().strip() 
     for i in get_proxies_list():
         cnt+=1
         try:
             r, session = get_main_page(main_page, i, ua.random)
-        except: print(f'Сервер {i} не доступен'); sleep(1); clear_terminal()
+        except: print(f'{Fore.RED}Сервер {i} не доступен{Fore.RESET}'); sleep(1); clear_terminal()
 
         if r is not None:
             try:
@@ -158,7 +170,7 @@ def get_film_name():
                 break
             except:
                 clear_terminal()
-                print('ОШИБКА!\nПопробуйте повторить запрос')
+                print(Fore.RED+'ОШИБКА!\nПопробуйте повторить запрос'+Fore.RESET)
                 break
 
 
@@ -167,11 +179,14 @@ def main():
     while True:
         while True:
             try:
-                command = int(input('Введите номер команды: \n1: Найти фильм\n2: Обновить proxy\n3: Выход\n'))
+                command = int(input(f'{Fore.GREEN}{Back.BLACK}{Style.BRIGHT}Введите номер команды:{Style.NORMAL}\
+                \n[{Style.BRIGHT}1{Style.NORMAL}] Найти фильм\
+                \n[{Style.BRIGHT}2{Style.NORMAL}] Обновить proxy\
+                \n[{Style.BRIGHT}3{Style.NORMAL}] Выход\n'))
                 break
             except:
                 clear_terminal()
-                print('Некорректная команда')
+                print(Fore.RED+'Некорректная команда'+Fore.RESET)
         if command == 1:
             get_film_name()
         elif command == 2:
@@ -185,7 +200,7 @@ def main():
             break
         elif command not in (1, 2, 3):
             clear_terminal()
-            print('Некорректная команда')
+            print(Fore.RED+'Некорректная команда'+Fore.RESET)
 
 
 if __name__ == '__main__':
