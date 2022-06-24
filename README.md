@@ -63,15 +63,16 @@ ___
 [Desktop Entry]
 Version=1.0
 Name=Proxynema
-Exec=~/Desktop/dist/proxynema
+Exec=/home/ИМЯ ПОЛЬЗОВАТЕЛЯ/Desktop/dist/proxynema
 Type=Application
 Terminal=true
 StartupNotify=false
-Path=~/Desktop/dist
+Path=/home/ИМЯ ПОЛЬЗОВАТЕЛЯ/Desktop/dist
 ```
+__В файле указываем абсолютные пути!__
 
 Также вы можете установить свою картинку иконки, скопировав ее в директорию __dist__ и добавив к содержимому файла __launcher.desktop__ путь 
-* ```Icon=~/Desktop/dist/your_picture.jpg```
+* ```Icon=/home/ИМЯ ПОЛЬЗОВАТЕЛЯ/Desktop/dist/your_picture.jpg```
 
 Далее __копируете__ файл __launcher.desktop__ и вставляете на рабочий стол.
 ___
