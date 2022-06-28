@@ -23,7 +23,7 @@ def clear_terminal():
     print(Fore.YELLOW+Back.BLACK+Style.NORMAL+
         """
         _____________________________________________________________________
-                
+
         Данный скрипт ищет временные ссылки на фильмы сайта https://kinogo.la
         посредством проксирования без VPN.
         В настоящей версии программы не реализован парсинг сериалов!
@@ -61,7 +61,7 @@ def save_film_page(link, ses):
     driver.close()
     driver.quit()
     get_mp4('film.html')
-    
+
 
 def get_mp4(file):
     clear_terminal()
@@ -147,31 +147,38 @@ def search_film(ses, film):
             sleep(3)
             save_film_page(link, ses)
         else:
-            clear_terminal() 
+            clear_terminal()
             print("Фильм не найден")
 
 
 def get_film_name():
     ua = UserAgent()
-    clear_terminal() 
+    clear_terminal()
     main_page = 'https://kinogo.la'
     cnt = 0
     r = None
-    film_name = input(f'{Style.BRIGHT}Введите название фильма: {Style.NORMAL}').lower().strip() 
-    for i in get_proxies_list():
-        cnt+=1
-        try:
-            r, session = get_main_page(main_page, i, ua.random)
-        except: print(f'{Fore.RED}Сервер {i} не доступен{Fore.RESET}'); sleep(1); clear_terminal()
+    while True:
+        film_name = input(f'{Style.BRIGHT}Введите название фильма: {Style.NORMAL}').lower().strip()
+        if film_name.isalnum():
+            for i in get_proxies_list():
+                cnt+=1
+                try:
+                    r, session = get_main_page(main_page, i, ua.random)
+                except: print(f'{Fore.RED}Сервер {i} не доступен{Fore.RESET}'); sleep(1); clear_terminal()
 
-        if r is not None:
-            try:
-                search_film(session, film_name)
+                if r is not None:
+                    try:
+                        search_film(session, film_name)
+                        break
+                    except:
+                        clear_terminal()
+                        print(Fore.RED+'ОШИБКА!\nПопробуйте повторить запрос'+Fore.RESET)
+                        break
+            else:
+                print(Fore.RED+'На данный момент все прокси недоступны'+Fore.RESET)
                 break
-            except:
-                clear_terminal()
-                print(Fore.RED+'ОШИБКА!\nПопробуйте повторить запрос'+Fore.RESET)
-                break
+        else: print(Fore.RED+'Некорректное название'+Fore.RESET)
+        break
 
 
 def main():
