@@ -119,7 +119,7 @@ def get_main_page(main_page, proxy, agent)->tuple:
     else: print(r.status)
 
 
-def search_film(ses, film):
+def search_film(ses:requests.Session, film:str)->None:
     links = []
     print('Выполняется поиск')
     payload = {'query': film}
@@ -138,8 +138,9 @@ def search_film(ses, film):
             while True:
                 try:
                     movie_number = int(input(f'{Style.BRIGHT}Введите порядковый номер фильма: {Style.NORMAL}'))
-                    link = links[movie_number-1 if movie_number >= 2 else 0]
-                    break
+                    if movie_number != 0:
+                        link = links[movie_number-1 if movie_number >= 2 else 0]
+                        break
                 except:
                     print(Fore.RED+'Некорректная команда'+Fore.GREEN)
             clear_terminal()
@@ -151,7 +152,7 @@ def search_film(ses, film):
             print("Фильм не найден")
 
 
-def get_film_name():
+def get_film_name()->None:
     ua = UserAgent()
     clear_terminal()
     main_page = 'https://kinogo.la'
@@ -177,8 +178,8 @@ def get_film_name():
             else:
                 print(Fore.RED+'На данный момент все прокси недоступны'+Fore.RESET)
                 break
-        else: print(Fore.RED+'Некорректное название'+Fore.RESET)
-        break
+            break
+        else: print(Fore.RED+'Некорректное название'+Fore.GREEN)
 
 
 def main():
