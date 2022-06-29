@@ -156,14 +156,12 @@ def get_film_name()->None:
     ua = UserAgent()
     clear_terminal()
     main_page = 'https://kinogo.la'
-    cnt = 0
     r = None
     while True:
         film_name = input(f'{Style.BRIGHT}Введите название фильма: {Style.NORMAL}').lower().strip()
+        film_name = ' '.join([i for i in film_name.split() if (i.isspace() or i.isalnum())]).strip()
         if film_name:
-            film_name = ' '.join([i for i in film_name.split() if (i.isspace() or i.isalnum())]).strip()
             for i in get_proxies_list():
-                cnt+=1
                 try: r, session = get_main_page(main_page, i, ua.random)
                 except: print(f'{Fore.RED}Сервер {i} не доступен{Fore.RESET}'); sleep(1); clear_terminal()
 
