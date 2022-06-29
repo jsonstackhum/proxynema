@@ -160,17 +160,15 @@ def get_film_name()->None:
     r = None
     while True:
         film_name = input(f'{Style.BRIGHT}Введите название фильма: {Style.NORMAL}').lower().strip()
-        if film_name.isalnum():
+        if film_name:
+            film_name = ' '.join([i for i in film_name.split() if (i.isspace() or i.isalnum())]).strip()
             for i in get_proxies_list():
                 cnt+=1
-                try:
-                    r, session = get_main_page(main_page, i, ua.random)
+                try: r, session = get_main_page(main_page, i, ua.random)
                 except: print(f'{Fore.RED}Сервер {i} не доступен{Fore.RESET}'); sleep(1); clear_terminal()
 
                 if r is not None:
-                    try:
-                        search_film(session, film_name)
-                        break
+                    try: search_film(session, film_name); break
                     except:
                         clear_terminal()
                         print(Fore.RED+'ОШИБКА!\nПопробуйте повторить запрос'+Fore.RESET)
