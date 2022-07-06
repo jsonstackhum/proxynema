@@ -49,10 +49,12 @@ def save_film_page(link, ses):
     options.set_preference('network.proxy.https_port', port)
     options.set_preference('network.proxy.ssl', ip)
     options.set_preference('network.proxy.ssl_port', port)
+    print('Прокси и user-agent подключены')
     options.headless = True
     driver = webdriver.Firefox(options=options, service=service)
     driver.get(link)
-    sleep(2)
+    print('GET-запрос выполнен')
+    sleep(4)
     html = driver.page_source
     with open('film.html','w') as f:
         f.write(html)
@@ -69,11 +71,9 @@ def get_mp4(file):
     with open(file, 'r') as f:
         html = f.read()
         soup = BeautifulSoup(html, 'lxml')
-        section = soup.find('div', class_='section')
-        box_visible = section.find('div', class_='box visible')
-        pjsdiv = box_visible.find('pjsdiv', class_='pjscssed')
-        video = pjsdiv.find('video')
-        src = video.get('src')
+        selector = str(soup.select('div:nth-child(12) > a:nth-child(2)'))
+        src = selector[21:].split()[0].strip('"')
+
         while True:
             try:
                 clear_terminal()
@@ -112,7 +112,7 @@ def get_main_page(main_page, proxy, agent)->tuple:
     session = requests.Session()
     session.proxies.update(proxies)
     session.headers.update(headers)
-    r = session.get(main_page, timeout=3)
+    r = session.get(main_page, timeout=4)
     if r.ok:
         print(f'Успешно подключен прокси сервер: {proxy} с юзер-агентом {agent}')
         return r, session
@@ -166,7 +166,8 @@ def get_film_name()->None:
                 except: print(f'{Fore.RED}Сервер {i} не доступен{Fore.RESET}'); sleep(1); clear_terminal()
 
                 if r is not None:
-                    try: search_film(session, film_name); break
+                    try: 
+                        search_film(session, film_name); break
                     except:
                         clear_terminal()
                         print(Fore.RED+'ОШИБКА!\nПопробуйте повторить запрос'+Fore.RESET)
