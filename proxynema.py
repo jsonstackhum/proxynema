@@ -75,22 +75,27 @@ def get_mp4(file):
         src = selector[21:].split()[0].strip('"')
 
         while True:
-            try:
-                clear_terminal()
-                resolution = int(input(f'{Style.BRIGHT}Выберите разрешение: {Style.NORMAL}\
-                    \n[{Style.BRIGHT}1{Style.NORMAL}] 240\
-                    \n[{Style.BRIGHT}2{Style.NORMAL}] 360\
-                    \n[{Style.BRIGHT}3{Style.NORMAL}] 480\
-                    \n[{Style.BRIGHT}4{Style.NORMAL}] 720\n'))
-                src = src.strip('240.mp4')+('240.mp4' if resolution == 1 else '360.mp4' if resolution == 2 else '480.mp4' if resolution == 3 else '720.mp4' if resolution == 4 else '240.mp4')
-                clear_terminal()
-                print(f'{Style.BRIGHT}ССЫЛКА:{Style.NORMAL}')
-                print(f'{Fore.CYAN}{src}')
+            if 'download' in selector:
                 try:
-                    os.remove('film.html')
-                except: pass
+                    clear_terminal()
+                    resolution = int(input(f'{Style.BRIGHT}Выберите разрешение: {Style.NORMAL}\
+                        \n[{Style.BRIGHT}1{Style.NORMAL}] 240\
+                        \n[{Style.BRIGHT}2{Style.NORMAL}] 360\
+                        \n[{Style.BRIGHT}3{Style.NORMAL}] 480\
+                        \n[{Style.BRIGHT}4{Style.NORMAL}] 720\n'))
+                    src = src.strip('240.mp4')+('240.mp4' if resolution == 1 else '360.mp4' if resolution == 2 else '480.mp4' if resolution == 3 else '720.mp4' if resolution == 4 else '240.mp4')
+                    clear_terminal()
+                    print(f'{Style.BRIGHT}ССЫЛКА:{Style.NORMAL}')
+                    print(f'{Fore.CYAN}{src}')
+                    try:
+                        os.remove('film.html')
+                    except: pass
+                    break
+                except: print(Fore.RED+"Выбрано неверное разрешение"+Fore.RESET)
+            else: 
+                clear_terminal()
+                print('Ссылка не найдена. Возможно, вы пытались найти сериал.')
                 break
-            except: print(Fore.RED+"Выбрано неверное разрешение"+Fore.RESET)
 
 
 def get_proxies_list()->list:
